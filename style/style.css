@@ -1,0 +1,10 @@
+.mdl-grid.center-items {
+    justify-content: center;
+  }
+  #userphoto{
+      border-radius: 40px;
+  }
+  #mess{
+    position: absolute;
+  }
+

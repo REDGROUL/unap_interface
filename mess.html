@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <title>
+            Messenger
+        </title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="/style/material.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+        <link href="style/style.css" rel="stylesheet">
+        <script src="/scripts/jquery.js"></script>
+        <script src="/scripts/material.min.js"></script>
+        <script src="/scripts/script.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <script>
+              checkAuth();
+             
+        </script>
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+            <header class="mdl-layout__header">
+              <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <span class="mdl-layout-title">Messenger</span>
+                <!-- Add spacer, to align navigation to the right -->
+                <div class="mdl-layout-spacer"></div>
+                <!-- Navigation. We hide it in small screens. -->
+                <nav class="mdl-navigation mdl-layout--large-screen-only">
+                    
+                 
+                </nav>
+              </div>
+            </header>
+            <div class="mdl-layout__drawer">
+                <img id="userphoto" src="" class="demo-avatar">
+                <div class="demo-avatar-dropdown">
+                  <span></span>
+                  <div class="mdl-layout-spacer"></div>
+                  Ник: <span id="role"></span>
+                  <script>
+                      var photo = document.getElementById('userphoto');
+                      var role = document.getElementById('role');
+                      var photo_db = getInfo(localStorage.getItem('id'));
+                      console.log(photo_db);
+                      role.innerHTML = photo_db['payload']['nick'];
+                      //document.write(photo_db['payload']['nick'])
+                        var final_photo = 'http://api.unmessenger.com/'+photo_db['payload']['photo']; 
+                        var photo_src = photo.setAttribute('src', final_photo);
+                  </script><br>
+                  Роль: [
+                  
+                  <script>
+                      document.write(localStorage.getItem('role'));
+                  </script>
+                  ]
+                </div>
+                <nav class="mdl-navigation">
+                  <a class="mdl-navigation__link" href="feed.html">Каналы</a>
+                  <a class="mdl-navigation__link" href="invite.html">Создание диалога</a>
+                  <a class="mdl-navigation__link" href="mess.html">Сообщения</a>
+                  <a class="mdl-navigation__link" href="cloud.html">Облако</a>
+
+                  <a class="mdl-navigation__link" href="settings.html">Настройки</a>
+       
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <a class="mdl-navigation__link"  onclick="logOut(localStorage.getItem('token'))">Выйти</a>
+                </nav>
+              </div>
+              <script>
+                var photo = document.getElementById('userphoto');
+                var photo_db = getInfo(localStorage.getItem('id'));
+                console.log(photo_db);
+               // document.write(photo_db['payload']['nick'])
+                  var final_photo = 'http://api.unmessenger.com/'+photo_db['payload']['photo']; 
+                  var photo_src = photo.setAttribute('src', final_photo);
+            </script>
+            <main class="mdl-layout__content">
+              <div id = "chatarea" class="page-content">
+          
+                    
+                    <ul class="demo-list-three mdl-list" id="friend-list" style="position: fixed;">
+                        
+                      
+                    </ul>
+              </div>
+              <script>
+                var photo = document.getElementById('userphoto');
+                var photo_db = getInfo(localStorage.getItem('id'));
+                console.log(photo_db);
+              //  document.write(photo_db['payload']['nick'])
+                  var final_photo = 'http://api.unmessenger.com/'+photo_db['payload']['photo']; 
+                  var photo_src = photo.setAttribute('src', final_photo);
+            </script>
+            </main>
+          </div>
+          <script>
+              
+          
+             getDialogs();
+             setInterval(getDialogs,1500);
+             
+             
+             
+    
+              </script>
+    </body>
+</html>

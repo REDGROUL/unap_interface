@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <title>
+            Messenger
+        </title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="/style/material.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+        <link href="style/style.css" rel="stylesheet">
+        <script src="/scripts/jquery.js"></script>
+        <script src="/scripts/material.min.js"></script>
+        <script src="/scripts/script.js"></script>
+    </head>
+
+    <body>
+        <script>
+            var gets = (function() {
+        var a = window.location.search;
+        var b = new Object();
+        a = a.substring(1).split("&");
+        for (var i = 0; i < a.length; i++) {
+          c = a[i].split("=");
+            b[c[0]] = c[1];
+        }
+        return b;
+    })();
+    
+        console.log(gets);
+   
+        //console.log(dialog_id);
+    
+        var getter = gets['id'];
+
+        sub(getter);
+        window.location = "feed.html"
+        
+        </script>
+
+        
+    </body>

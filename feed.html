@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <title>
+            Messenger
+        </title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="/style/material.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+        <link href="style/style.css" rel="stylesheet">
+        <script src="/scripts/jquery.js"></script>
+        <script src="/scripts/material.min.js"></script>
+        <script src="/scripts/script.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <script>
+              checkAuth();
+             
+        </script>
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+            <header class="mdl-layout__header">
+              <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <span class="mdl-layout-title">Messenger</span>
+                <!-- Add spacer, to align navigation to the right -->
+                <div class="mdl-layout-spacer"></div>
+                <!-- Navigation. We hide it in small screens. -->
+                <nav class="mdl-navigation">
+                  
+                </nav>
+              </div>
+            </header>
+            <div class="mdl-layout__drawer">
+                <img id="userphoto" src="" class="demo-avatar">
+                <div class="demo-avatar-dropdown">
+                  <span></span>
+                  <div class="mdl-layout-spacer"></div>
+                  Ник:
+                  <script>
+                      var photo = document.getElementById('userphoto');
+                      var photo_db = getInfo(localStorage.getItem('id'));
+                      console.log(photo_db);
+                      document.write(photo_db['payload']['nick'])
+                        var final_photo = 'http://api.unmessenger.com/'+photo_db['payload']['photo']; 
+                        var photo_src = photo.setAttribute('src', final_photo);
+                  </script><br>
+                  Роль: [
+                  <script>
+                      document.write(localStorage.getItem('role'));
+                  </script>
+                  ]
+                </div>
+                <nav class="mdl-navigation">
+                  <a class="mdl-navigation__link" href="feed.html">Каналы</a>
+                  <a class="mdl-navigation__link" href="invite.html">Создание диалога</a>
+                  <a class="mdl-navigation__link" href="mess.html">Сообщения</a>
+                  <a class="mdl-navigation__link" href="cloud.html">Облако</a>
+
+                  <a class="mdl-navigation__link" href="settings.html">Настройки</a>
+       
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <a class="mdl-navigation__link"  onclick="logOut(localStorage.getItem('token'))">Выйти</a>
+                </nav>
+              </div>
+              <script>
+                var photo = document.getElementById('userphoto');
+                var photo_db = getInfo(localStorage.getItem('id'));
+                console.log(photo_db);
+              //  document.write(photo_db['payload']['nick'])
+                  var final_photo = 'http://api.unmessenger.com/'+photo_db['payload']['photo']; 
+                  var photo_src = photo.setAttribute('src', final_photo);
+            </script>
+            <main class="mdl-layout__content">
+              <div class="page-content">
+                <div style="width:381px; margin-left: auto; margin-right: auto;">
+                <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" id="search">
+                    <label class="mdl-textfield__label" for="search">Поиск</label>
+                  </div>
+                  <button class="mdl-button mdl-js-button mdl-button--raised"  id ="searchbtn">
+                    Найти
+                  </button>
+                  <script>
+                      $("#searchbtn").click(function(){
+                        var name = document.getElementById("search").value;
+                       
+
+                       var response =  $.ajax({
+                       url: 'http://api.unmessenger.com/chanellSearch/'+name,
+                       method: 'get',
+                       async: false,
+                       dataType: 'html',
+                       headers: {
+                           "token":localStorage.getItem('token')
+                       },
+                       success : function(text)
+                       {
+                         
+                           response = text;
+                       }
+                       
+                       }).responseText;
+
+
+                       jasonda = JSON.parse(response);
+
+                   var clist = document.getElementById('canal-list');
+                   console.log(jasonda)
+
+                     lenc = jasonda['payload']['length'];
+                   clist.innerHTM = "";
+                  clist.innerHTM = "<h3>Поиск по каналам:</h3>";
+                  for(i = 0; i< lenc; i++){
+                    clist.innerHTML += '<li class="mdl-list__item mdl-list__item--three-line"><span class="mdl-list__item-primary-content"><i class=" mdl-list__item-avatar">'
+                            +'">'+
+                            
+                        '</i>'+
+                        '<a>'+
+                  '<span>'+jasonda['payload'][i]['channel_name']+'</span>'+
+                    '</a>'+
+                  '<span class="mdl-list__item-text-body">'+
+                  '<a href="addc.html?id='+jasonda['payload'][i]['id']+'">Подписаться</a>'+
+                   
+                  '</span>'+
+                '</span>'+
+                '<span class="mdl-list__item-secondary-content">'+
+                   
+                '</span>'+
+                              '</li>';
+                   
+
+
+                  }
+                  
+                  
+
+                    });
+                  </script>
+
+<br>
+                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" id="create">
+                    <label class="mdl-textfield__label" for="create"> Название</label>
+                  </div><br>
+                  <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                    <input class="mdl-textfield__input" type="text" id="desc">
+                    <label class="mdl-textfield__label" for="desc">Описание</label>
+                  </div>
+                  <button class="mdl-button mdl-js-button mdl-button--raised" onclick="crt()" id ="createbtn">
+                    создать
+                  </button>
+                  <script>
+
+                  
+
+                    function srch()
+                    {
+                     
+                    // lenc = response['payload']['length'];
+                 /* clist.innerHTM = "";
+                  for(i = 0; i< lenc; i++){
+                    clist.innerHTML += '<li class="mdl-list__item mdl-list__item--three-line"><span class="mdl-list__item-primary-content"><i class=" mdl-list__item-avatar">'
+                            +'<img style="border-radius:  30px;" width="40px" height ="40px" src="'+'http://api.unmessenger.com/'+'">'+
+                            
+                        '</i>'+
+                        '<a>'+
+                  '<span>'+response['payload'][i]['channel_name']+'</span>'+
+                    '</a>'+
+                  '<span class="mdl-list__item-text-body">'+
+                  '<a href="channell.html?id='+response['payload'][i]['id']+'">Открыть</a>'+
+                   
+                  '</span>'+
+                '</span>'+
+                '<span class="mdl-list__item-secondary-content">'+
+                   
+                '</span>'+
+                              '</li>';*/
+                  
+
+
+
+                    } 
+
+                    function crt()
+                  {
+                    var name = document.getElementById("create").value;
+                        var desc = document.getElementById("desc").value;
+                        if(name !="" && desc !=""){
+                   
+                          createChannel(name, desc);
+                          window.location = "feed.html"
+                        }
+                  }
+                  </script>
+                  <ul class="demo-list-three mdl-list" id="user-list">
+                        
+                      
+                </ul>
+                </div>
+                <h3>Ваши каналы:</h3>
+                <ul class="demo-list-three mdl-list" id="canal-list">
+                        
+                      
+                </ul>
+
+                <script>
+                  var canals = getcanals();
+                if( canals['payload'] != undefined){
+                  var lenc = canals['payload']['length'];
+                  
+                  var clist = document.getElementById('canal-list');
+                  console.log(canals);
+                  clist.innerHTM = "";
+                  for(i = 0; i< lenc; i++){
+                    clist.innerHTML += '<li class="mdl-list__item mdl-list__item--three-line"><span class="mdl-list__item-primary-content"><i class=" mdl-list__item-avatar">'
+                           +'">'+
+                            
+                        '</i>'+
+                        '<a>'+
+                  '<span>'+canals['payload'][i]['channel_name']+'</span>'+
+                    '</a>'+
+                  '<span class="mdl-list__item-text-body">'+
+                  '<a href="channell.html?id='+canals['payload'][i]['channel_id']+'">Открыть</a>'+
+                   
+                  '</span>'+
+                '</span>'+
+                '<span class="mdl-list__item-secondary-content">'+
+                   
+                '</span>'+
+                              '</li>';
+                  }
+                   /* $("#search-btn").click(function(){
+                        var name = document.getElementById("search").value;
+                        if(name !=""){
+                            
+                            searchFriend(name);
+                        }
+
+                    });*/
+
+                    
+                    $("#createbtn").click(function(){
+                       
+                    });
+
+                  }
+                </script>
+              </div>
+            </main>
+          </div>
+          <script>
+             
+              </script>
+    </body>
+</html>

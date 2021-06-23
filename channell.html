@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <title>
+            Messenger
+        </title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="/style/material.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+        <link href="style/style.css" rel="stylesheet">
+        <script src="/scripts/jquery.js"></script>
+        <script src="/scripts/material.min.js"></script>
+        <script src="/scripts/script.js"></script>
+    </head>
+    <body>
+        <script>
+              checkAuth();
+             
+        </script>
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+            <header class="mdl-layout__header">
+              <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <span class="mdl-layout-title">Messenger</span>
+                <!-- Add spacer, to align navigation to the right -->
+                <div class="mdl-layout-spacer"></div>
+                <!-- Navigation. We hide it in small screens. -->
+                <nav class="mdl-navigation mdl-layout--large-screen-only">
+                    
+     
+                </nav>
+              </div>
+            </header>
+            <div class="mdl-layout__drawer">
+                <img id="userphoto" src=""  class="demo-avatar">
+                <div class="demo-avatar-dropdown">
+                  <span></span>
+                  <div class="mdl-layout-spacer"></div>
+                  Ник:
+                  <script>
+                      var photo = document.getElementById('userphoto');
+                      var photo_db = getInfo(localStorage.getItem('id'));
+                      document.write(photo_db['payload']['nick'])
+                      var final_photo = 'http://api.unmessenger.com/'+photo_db['payload']['photo']; 
+                      console.log(final_photo);
+                      photo.setAttribute('src', final_photo);
+                  </script><br>
+                  Роль: [
+                  <script>
+                      document.write(localStorage.getItem('role'));
+                  </script>
+                  ]
+                </div>
+                <nav class="mdl-navigation">
+                  <a class="mdl-navigation__link" href="feed.html">Каналы</a>
+                  <a class="mdl-navigation__link" href="invite.html">Создание диалога</a>
+                  <a class="mdl-navigation__link" href="mess.html">Сообщения</a>
+                  <a class="mdl-navigation__link" href="cloud.html">Облако</a>
+                  <a class="mdl-navigation__link" href="settings.html">Настройки</a>
+
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <a class="mdl-navigation__link"  onclick="logOut(localStorage.getItem('token'))">Выйти</a>
+                </nav>
+              </div>
+              
+              <script>
+                var photo = document.getElementById('userphoto');
+                var photo_db = getInfo(localStorage.getItem('id'));
+               // console.log(photo_db);
+               // document.write(photo_db['payload']['nick'])
+                  var final_photo = 'http://api.unmessenger.com/'+photo_db['payload']['photo']; 
+                  var photo_src = photo.setAttribute('src', final_photo);
+                  
+            </script>
+            <main class="mdl-layout__content">
+              <div class="page-content" id="chatarea">
+                <style>
+                    .chat__header {
+    text-align: center;
+  }
+  
+  .chat__item {
+    display: flex;
+    align-items: flex-start;
+  }
+  
+  .chat__person-avatar {
+    border-radius: 50%;
+  }
+  
+  .chat__messages {
+    margin-left: 10px;
+  }
+  .chat__message {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+  }
+  
+  .chat__message-content {
+    border-radius: 5px;
+    padding: 7px;
+    background-color: #ccc;
+    display: inline-block;
+    
+    margin-left: 5px;
+  }
+  
+  .chat__item--responder {
+    flex-direction: row-reverse;
+  }
+  
+    .chat__item--responder .chat__message {
+      /* flex-direction: row-reverse; */
+    }
+  
+    .chat__item--responder .chat__message-content {
+      margin-left: 0;
+      margin-right: 5px;
+    }
+                </style>
+                <div class="chat" style=""> 
+                 
+                
+                 
+                
+                    
+                    <div id="chat_fath">
+ <div class="chat__content" id="messchat" style="overflow: auto
+                    ; height: 440px;" >
+                    
+                
+                    </div>
+
+                    </div>
+                   
+                    <!-- <tbody id="messchat">
+                        
+                           
+                        </tr>   
+                     
+                      
+                    </tbody> -->
+                   
+                  <div id="inputs" style=" width: 450px; margin-left: auto; margin-right: auto; margin-top: 0px;">
+                    
+                    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+                      
+                        <input  style = "position: relative;"   onchange="" class="mdl-textfield__input" type="text" id="sample3">
+                        <label class="mdl-textfield__label" for="sample3">Сообщение</label>
+                      
+                        <button  style = "margin-left: 300px;" class="mdl-button mdl-js-button mdl-button--raised" onclick="newmess()" id="send">
+                          Отправить
+                        </button>
+                        <input type="file" onchange="" id="js-file">
+                        </div>
+                   
+                      
+                  </div>
+                
+
+                  <script>
+                      
+                        var gets = (function() {
+                   var a = window.location.search;
+                   var b = new Object();
+                   a = a.substring(1).split("&");
+                   for (var i = 0; i < a.length; i++) {
+                   c = a[i].split("=");
+                       b[c[0]] = c[1];
+                   }
+                   return b;
+               })();
+               var dialog_id = gets['id'];
+                   //console.log(dialog_id);
+                   var chan = getmesschan(gets['id'])
+                  console.log(chan);
+                  // console.log(gets);
+                  var len = chan['payload']['length'];
+                  var chat = document.getElementById('messchat');
+                  chat.innerHTML = ""
+                  var messages = chan;
+                  var mail ="" ;
+                  var mages = "" ;
+                  for(i =0; i<len; i++){
+                   if(chan['payload'][i]['file_type'] == 'image'){
+                   
+                    
+                   mages = '<br><img  style="max-width:270px; max-height:400px"  src='+'http://api.unmessenger.com/'+messages['payload'][i]['file']+'>'
+                    
+                   }
+                if(messages['payload'][i]['file_type'] == 'audio' || messages['payload'][i]['type'] == 'sound' || messages['payload'][i]['type'] == 'music' ){
+                  
+                    
+                 
+    
+    
+    
+                    mages=
+                    '<br><audio controls=""  name="media"><source src="http://api.unmessenger.com/'+messages['payload'][i]['file']+'" type="audio/mpeg"></audio>'
+                    console.log(mages);
+                    
+                }  
+                if(messages['payload'][i]['file_type'] == 'video' ){
+                   
+                    
+                 
+    
+    
+    
+                    mages=
+                    '<br><video style="max-width:250px" controls="" name="media"><source src="http://api.unmessenger.com/'+messages['payload'][i]['file']+'"type="video/mp4"></video>'
+                console.log(mail)
+                
+              }
+              
+              if(messages['payload'][i]['file_type'] == 'file' ){
+               
+                
+                
+                
+                
+                
+                mages =
+                '<br><a href="http://api.unmessenger.com/'+messages['payload'][i]['file']+'">Вложение '+messages['payload'][i]['type']+'</a>'
+               
+                    
+                }
+                mail = messages['payload'][i]['message']
+
+                if(messages['payload'][i]['message'] != "" && messages['payload'][i]['file'] == ""){
+                  mail = messages['payload'][i]['message']
+                  mages = "";
+
+                  
+
+                }
+                  console.log(mages)
+                  console.log(mail)
+                    chat.innerHTML +=
+           ' <div class="chat__item " style="max-width:50%">'+
+                      
+                        
+                         ' <div class="chat__messages ">'+
+                            '<div class="chat__message">'+
+                            '<div class="chat__message-content"><div class="chat__message-time"><a></a></div>'+mail+mages+
+    
+                          
+                            '<br><div class="chat__message-time lt"></div>'+'</div>'+
+                            '</div>'+ 
+                            '</div>'+
+                            
+                            
+                          '</div>'+
+                        '</div><br>';
+            
+                            
+                  }
+                        
+
+                  function newmess()
+                  {
+                    var gets = (function() {
+                   var a = window.location.search;
+                   var b = new Object();
+                   a = a.substring(1).split("&");
+                   for (var i = 0; i < a.length; i++) {
+                   c = a[i].split("=");
+                       b[c[0]] = c[1];
+                   }
+                   return b;
+               })();
+               var dialog_id = gets['id'];
+               var text_mess = document.getElementById('sample3').value;
+               var formData = new FormData();
+		                        formData.append('userfile', $("#js-file")[0].files[0]);
+		                        formData.append('message', text_mess);
+                    sendMessageCh(dialog_id, formData);
+                  }
+                    
+
+
+                     
+                  </script>
+              </div>
+            </main>
+          </div>
+          <script>
+              
+            
+             
+   // console.log(getter);
+
+   
+   // setInterval(renderMess());
+    
+
+             //getDialogs();
+             
+    
+              </script>
+                   <script>
+
+               
+               
+                 //  console.log(gets);
+                 /*  var dialog_id = gets['/dialog_id'];
+                   //console.log(dialog_id);
+               
+                   var getter = gets['user_id'];
+                   console.log(getter);
+                  var get = getInfo(getter);
+                var pers = document.getElementById('person');
+                person.innerHTML = "";
+                person.innerHTML += '<li class="mdl-list__item mdl-list__item--three-line"><span class="mdl-list__item-primary-content"><i class=" mdl-list__item-avatar">'
+                            +'<img style="border-radius:  30px;" width="40px" height ="40px" src="'+'http://api.unmessenger.com/'+get['payload']['photo']+'">'+
+                            
+                        '</i>'+
+                        '<a href="">'+
+                  '<span>'+get['payload']['nick']+'</span>'+
+                    '</a>'+" "+get['payload']['status']+
+                '</span>'+
+                '<span class="mdl-list__item-secondary-content">'+
+                   
+                '</span>'+
+                              '</li>';
+                }
+                var messageBody = document.querySelector('#messchat');
+messageBody.scrollTop = messageBody.scrollHeight + messageBody.clientHeight;
+                getperson();
+                setInterval(getperson, 3000);*/
+                
+               </script>
+
+              
+    </body>
+    
+       
+     
+</html>

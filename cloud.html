@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <title>
+            Messenger
+        </title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="/style/material.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+        <link href="style/style.css" rel="stylesheet">
+        <script src="/scripts/jquery.js"></script>
+        <script src="/scripts/material.min.js"></script>
+        <script src="/scripts/script.js"></script>
+    </head>
+    <body>
+        <script>
+              checkAuth();
+             
+        </script>
+        <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
+            <header class="mdl-layout__header">
+              <div class="mdl-layout__header-row">
+                <!-- Title -->
+                <span class="mdl-layout-title">Messenger</span>
+                <!-- Add spacer, to align navigation to the right -->
+                <div class="mdl-layout-spacer"></div>
+                <!-- Navigation. We hide it in small screens. -->
+                <nav class="mdl-navigation mdl-layout--large-screen-only">
+                    
+            
+                </nav>
+              </div>
+            </header>
+            <div class="mdl-layout__drawer">
+                <img id="userphoto" src="" class="demo-avatar">
+          <div class="demo-avatar-dropdown">
+            <span></span>
+            <div class="mdl-layout-spacer"></div>
+            Ник:
+            <script>
+                var photo = document.getElementById('userphoto');
+                var photo_db = getInfo(localStorage.getItem('id'));
+                //console.log(photo_db);
+                document.write(photo_db['payload']['nick'])
+                  var final_photo = 'http://api.unmessenger.com/'+photo_db['payload']['photo']; 
+                  var photo_src = photo.setAttribute('src', final_photo);
+            </script><br>
+            Роль: [
+            <script>
+                document.write(localStorage.getItem('role'));
+            </script>
+            ]
+          </div>
+                <nav class="mdl-navigation">
+                  <a class="mdl-navigation__link" href="feed.html">Каналы</a>
+                  <a class="mdl-navigation__link" href="invite.html">Создание диалога</a>
+                  <a class="mdl-navigation__link" href="mess.html">Сообщения</a>
+                  <a class="mdl-navigation__link" href="cloud.html">Облако</a>
+
+                  <a class="mdl-navigation__link" href="settings.html">Настройки</a>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <br>
+                  <a class="mdl-navigation__link"  onclick="logOut(localStorage.getItem('token'))">Выйти</a>
+                </nav>
+              </div>
+              <script>
+                var photo = document.getElementById('userphoto');
+                var photo_db = getInfo(localStorage.getItem('id'));
+                console.log(photo_db);
+            //    document.write(photo_db['payload']['nick'])
+                  var final_photo = 'http://api.unmessenger.com/'+photo_db['payload']['photo']; 
+                  var photo_src = photo.setAttribute('src', final_photo);
+            </script>
+            <main class="mdl-layout__content">
+              <div class="page-content">
+                  <br>
+                  <br>
+                  <input type="file" id="js-file" value="файл для загрузки" onchange="setPhoto(this)">
+                  <br>
+                  <br>
+                  
+                <table class="mdl-data-table mdl-js-data-table" style="width: 100%;" >
+                    <thead>
+                      <tr>
+                          <h3>Тут собраны все ваши файлы, которые когда либо были загружены!</h3>
+                        <th class="mdl-data-table__cell--non-numeric">Имя файла</th>
+                        <th>Дата загрузки</th>
+                        <th>Скачать</th>
+                      </tr>
+                    </thead>
+                    <tbody id="file_table">
+                      
+                    </tbody>
+                  </table>
+              </div>
+            </main>
+          </div>
+          <script>
+              var files = getFiles(localStorage.getItem('token'));
+              var len = files['payload']['length'];
+       //   $('#img').addCss('color:red');
+          var img = document.getElementById("img");
+            var file_table = document.getElementById('file_table');
+            console.log(files);
+          for(i = 0 ; i<len; i++){
+              console.log(i);
+              file_table.innerHTML+= '<tr><th class="mdl-data-table__cell--non-numeric">'+files['payload'][i]['name']+'</th><th>'+files['payload'][i]['time_upload']+'</th><th><a  href="'+'http://api.unmessenger.com/'+files['payload'][i]['path']+'" download>Скачать</a></th></tr>';
+
+            //files['payload'][i][]
+          }
+
+          function setPhoto()
+              {
+                  let form = new FormData();
+                    form.append('userfile', File);
+                    
+                    var formData = new FormData();
+		            formData.append('userfile', $("#js-file")[0].files[0]);
+                    $.ajax({
+                        type: "POST",
+                        url: 'http://api.unmessenger.com/uploadFile/',
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        headers:{
+                            "token": localStorage.getItem('token')
+                        },
+                        data: formData,
+                        dataType : 'json',
+                        success: function(msg){
+                            console.log(msg);
+                            
+                            document.location = 'cloud.html'
+                        }
+                    });
+                    
+
+              }
+
+
+                    
+            
+              </script>
+    </body>
+</html>
